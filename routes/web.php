@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Models\Admin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,24 @@ Route::get('/', function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/create', 'create');
 });
+
+Route::get('/admins', function () {
+    return view('admins.index');
+})->name('admins.index');
+
+Route::get('/admins/create', function () {
+    return view('admins.create');
+})->name('admins.create');
+
+Route::post('/admins', function (Request $request) {
+    $request->validate([
+        'admin_name' => ['required'],
+        'admin_id' => ['required', 'alpha_num'],
+        'password' => ['required'],
+        'password_confirmation' => ['required'],
+    ]);
+    return "hello";
+})->name('admins.store');
 
 /*
 Verb	URI	Action	Route Name
