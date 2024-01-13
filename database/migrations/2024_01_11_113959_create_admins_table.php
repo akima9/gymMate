@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('id');
             $table->string('name');
             $table->string('password');
-            $table->enum('level', ['sub', 'main']);
+            $table->enum('level', ['sub', 'main'])->default('sub');
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();
         });
     }

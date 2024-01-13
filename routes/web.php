@@ -33,12 +33,21 @@ Route::get('/admins/create', function () {
 })->name('admins.create');
 
 Route::post('/admins', function (Request $request) {
-    $request->validate([
+    $validated = $request->validate([
         'admin_name' => ['required'],
         'admin_id' => ['required', 'alpha_num'],
         'password' => ['required'],
         'password_confirmation' => ['required'],
     ]);
+
+    $admin = Admin::create([
+        'name' => $validated['admin_name'],
+        'id' => $validated['admin_id'],
+        'password' => $validated['password'],
+    ]);
+
+    dd($admin);
+
     return "hello";
 })->name('admins.store');
 
