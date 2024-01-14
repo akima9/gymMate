@@ -12,14 +12,15 @@
             <a href="{{route('admins.create')}}" class="p-2 hover:text-orange-200">관리자 생성</a>
         </div>
         <div class="container mx-auto">
-            <h2 class="my-7 text-3xl font-bold">CMS ADMIN CREATE PAGE</h2>
-            <form action="{{route('admins.store')}}" method="post">
+            <h2 class="my-7 text-3xl font-bold">CMS ADMIN EDIT PAGE</h2>
+            <form action="{{route('admins.update', ['admin' => $admin->ulid])}}" method="post">
                 @csrf
-                <input type="text" name="admin_name" placeholder="이름" value="{{old('admin_name')}}" class="rounded border border-slate-200">
+                @method('PUT')
+                <input type="text" name="admin_name" placeholder="이름" value="{{$admin->name}}" class="rounded border border-slate-200">
                 @error('admin_name')
                     <p>{{$message}}</p>
                 @enderror
-                <input type="text" name="admin_id" placeholder="아이디" value="{{old('admin_id')}}" class="rounded border border-slate-200">
+                <input type="text" name="admin_id" placeholder="아이디" value="{{$admin->id}}" class="rounded border border-slate-200">
                 @error('admin_id')
                     <p>{{$message}}</p>
                 @enderror
@@ -31,7 +32,13 @@
                 @error('password_confirmation')
                     <p>{{$message}}</p>
                 @enderror
-                <button type="submit" class="rounded bg-slate-900 text-white py-2 px-3 hover:bg-slate-700">등록 신청</button>
+                <input type="radio" name="level" value="active" @if ($admin->status === 'active')
+                    checked
+                @endif>active
+                <input type="radio" name="level" value="inactive" @if ($admin->status === 'inactive')
+                    checked
+                @endif>inactive
+                <button type="submit" class="rounded bg-slate-900 text-white py-2 px-3 hover:bg-slate-700">수정하기</button>
             </form>
         </div>
     </body>
