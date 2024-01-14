@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,8 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::get('/admins', function () {
-    return view('admins.index');
+    $admins = Admin::all();
+    return view('admins.index', ['admins' => $admins]);
 })->name('admins.index');
 
 Route::get('/admins/create', function () {
@@ -41,14 +43,13 @@ Route::post('/admins', function (Request $request) {
     ]);
 
     $admin = Admin::create([
+        'ulid' => Str::ulid()->toBase32(),
         'name' => $validated['admin_name'],
         'id' => $validated['admin_id'],
         'password' => $validated['password'],
     ]);
 
-    dd($admin);
-
-    return "hello";
+    return redirect()->route('admins.index');
 })->name('admins.store');
 
 /*
