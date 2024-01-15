@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -25,69 +26,11 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/create', 'create');
 });
 
-Route::get('/admins', function () {
-    $admins = Admin::all();
-    return view('admins.index', ['admins' => $admins]);
-})->name('admins.index');
+Route::resource('admins', AdminController::class)->middleware('auth');
 
-Route::get('/admins/create', function () {
-    return view('admins.create');
-})->name('admins.create');
-
-Route::get('/admins/{ulid}', function ($ulid) {
-    $admin = Admin::where('ulid', $ulid)->first();
-    return view('admins.edit', ['admin' => $admin]);
-})->name('admins.edit');
-
-Route::put('/admins/{ulid}', function (Request $request, $ulid) {
-    // dd($ulid);
-    // dd($admin->id);
-    // dd($request);
-    
-
-    $validated = $request->validate([
-        'admin_name' => ['required'],
-        'admin_id' => ['required', 'alpha_num'],
-        'level' => ['required'],
-        'status' => ['required'],
-    ]);
-
-    $admin = Admin::where('ulid', $ulid)->first();
-    // dd($admin->id);
-    // dd($validated);
-
-    $admin->update([
-        'name' => $validated['admin_name'],
-        'id' => $validated['admin_id'],
-        'level' => $validated['level'],
-        'status' => $validated['status'],
-    ]);
-
-    // $admin->name = $validated['admin_name'];
-    // $admin->id = $validated['admin_id'];
-    // $admin->level = $validated['level'];
-    // dd($admin);
-
-    return redirect()->route('admins.index');
-})->name('admins.update');
-
-Route::post('/admins', function (Request $request) {
-    $validated = $request->validate([
-        'admin_name' => ['required'],
-        'admin_id' => ['required', 'alpha_num'],
-        'password' => ['required'],
-        'password_confirmation' => ['required'],
-    ]);
-
-    $admin = Admin::create([
-        'ulid' => Str::ulid()->toBase32(),
-        'name' => $validated['admin_name'],
-        'id' => $validated['admin_id'],
-        'password' => $validated['password'],
-    ]);
-
-    return redirect()->route('admins.index');
-})->name('admins.store');
+Route::get('/login/admin', function () {
+    return view('admins.login');
+})->name('login');
 
 /*
 Verb	URI	Action	Route Name
