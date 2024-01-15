@@ -39,18 +39,34 @@ Route::get('/admins/{ulid}', function ($ulid) {
     return view('admins.edit', ['admin' => $admin]);
 })->name('admins.edit');
 
-Route::put('/admins/{admin}', function (Request $request, Admin $admin) {
-    dd($request);
+Route::put('/admins/{ulid}', function (Request $request, $ulid) {
+    // dd($ulid);
+    // dd($admin->id);
+    // dd($request);
+    
+
     $validated = $request->validate([
         'admin_name' => ['required'],
         'admin_id' => ['required', 'alpha_num'],
         'level' => ['required'],
+        'status' => ['required'],
     ]);
 
-    $admin->name = $validated['admin_name'];
-    $admin->id = $validated['admin_id'];
-    $admin->level = $validated['level'];
-    dd($admin);
+    $admin = Admin::where('ulid', $ulid)->first();
+    // dd($admin->id);
+    // dd($validated);
+
+    $admin->update([
+        'name' => $validated['admin_name'],
+        'id' => $validated['admin_id'],
+        'level' => $validated['level'],
+        'status' => $validated['status'],
+    ]);
+
+    // $admin->name = $validated['admin_name'];
+    // $admin->id = $validated['admin_id'];
+    // $admin->level = $validated['level'];
+    // dd($admin);
 
     return redirect()->route('admins.index');
 })->name('admins.update');

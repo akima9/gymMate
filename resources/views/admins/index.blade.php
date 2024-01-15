@@ -29,7 +29,7 @@
                         <tr>
                             <td class="border">{{$loop->iteration}}</td>
                             <td class="border">
-                                <a href="{{route('admins.show', ['ulid' => $admin->ulid])}}">{{$admin->id}}</a>
+                                <a href={{route('admins.edit', ['ulid' => $admin->ulid])}}>{{$admin->id}}</a>
                             </td>
                             <td class="border">{{$admin->name}}</td>
                             <td class="border">{{$admin->level}}</td>

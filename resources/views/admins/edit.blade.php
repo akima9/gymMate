@@ -13,7 +13,7 @@
         </div>
         <div class="container mx-auto">
             <h2 class="my-7 text-3xl font-bold">CMS ADMIN EDIT PAGE</h2>
-            <form action="{{route('admins.update', ['admin' => $admin->ulid])}}" method="post">
+            <form action={{route('admins.update', $admin->ulid)}} method="POST">
                 @csrf
                 @method('PUT')
                 <input type="text" name="admin_name" placeholder="이름" value="{{$admin->name}}" class="rounded border border-slate-200">
@@ -32,10 +32,16 @@
                 @error('password_confirmation')
                     <p>{{$message}}</p>
                 @enderror
-                <input type="radio" name="level" value="active" @if ($admin->status === 'active')
+                <input type="radio" name="level" value="sub" @if ($admin->level === 'sub')
+                    checked
+                @endif>sub
+                <input type="radio" name="level" value="main" @if ($admin->level === 'main')
+                    checked
+                @endif>main
+                <input type="radio" name="status" value="active" @if ($admin->status === 'active')
                     checked
                 @endif>active
-                <input type="radio" name="level" value="inactive" @if ($admin->status === 'inactive')
+                <input type="radio" name="status" value="inactive" @if ($admin->status === 'inactive')
                     checked
                 @endif>inactive
                 <button type="submit" class="rounded bg-slate-900 text-white py-2 px-3 hover:bg-slate-700">수정하기</button>

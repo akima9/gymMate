@@ -11,5 +11,5 @@ class Admin extends Model
     use HasFactory;
     use HasUlids;
 
-    protected $fillable = ['ulid', 'name', 'id', 'password'];
+    protected $fillable = ['ulid', 'name', 'id', 'password', 'level', 'status'];
 }
