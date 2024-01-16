@@ -29,11 +29,16 @@ Route::controller(UserController::class)->group(function () {
 });
 
 // Route::resource('admins', AdminController::class);
-Route::resource('admins', AdminController::class)->middleware('auth');
+Route::resource('admins', AdminController::class)->middleware(['auth:admin']);
 
 Route::get('/login/admin', function () {
     return view('admins.login');
-})->name('login');
+})->name('admins.login');
+
+Route::get('/logout/admin', function () {
+    Auth::guard('admin')->logout();
+    return redirect()->route('admins.login');
+})->name('admins.logout');
 
 Route::post('/login/admin', function (Request $request) {
     $validated = $request->validate([
@@ -41,17 +46,15 @@ Route::post('/login/admin', function (Request $request) {
         'password' => ['required'],
     ]);
 
-    dd(Auth::attempt($validated));
+    $admin = Admin::where('id', $validated['id'])->first();
+    if ($admin->status === 'inactive') return back();
 
-    if (Auth::attempt($validated)) {
-        dd('success');
+    if (Auth::guard('admin')->attempt($validated)) {
         $request->session()->regenerate();
-        return redirect()->intended('admins.index');
+        return redirect()->intended(route('admins.index'));
     }
-    dd($validated);
-    return back();    
 })->name('login.admin');
-// $admin = Admin::where('ulid', $ulid)->first();
+
 /*
 Verb	URI	Action	Route Name
 GET	/photos	index	photos.index
