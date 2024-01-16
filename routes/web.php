@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -26,12 +28,30 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/create', 'create');
 });
 
+// Route::resource('admins', AdminController::class);
 Route::resource('admins', AdminController::class)->middleware('auth');
 
 Route::get('/login/admin', function () {
     return view('admins.login');
 })->name('login');
 
+Route::post('/login/admin', function (Request $request) {
+    $validated = $request->validate([
+        'id' => ['required'],
+        'password' => ['required'],
+    ]);
+
+    dd(Auth::attempt($validated));
+
+    if (Auth::attempt($validated)) {
+        dd('success');
+        $request->session()->regenerate();
+        return redirect()->intended('admins.index');
+    }
+    dd($validated);
+    return back();    
+})->name('login.admin');
+// $admin = Admin::where('ulid', $ulid)->first();
 /*
 Verb	URI	Action	Route Name
 GET	/photos	index	photos.index

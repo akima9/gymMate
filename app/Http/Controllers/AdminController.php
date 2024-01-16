@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -31,17 +33,17 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'admin_name' => ['required'],
-            'admin_id' => ['required', 'alpha_num'],
-            'password' => ['required'],
+            'name' => ['required'],
+            'id' => ['required', 'alpha_num', 'unique:admins,id'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
             'password_confirmation' => ['required'],
         ]);
     
         $admin = Admin::create([
             'ulid' => Str::ulid()->toBase32(),
-            'name' => $validated['admin_name'],
-            'id' => $validated['admin_id'],
-            'password' => $validated['password'],
+            'name' => $validated['name'],
+            'id' => $validated['id'],
+            'password' => Hash::make($validated['password']),
         ]);
     
         return redirect()->route('admins.index');
@@ -70,8 +72,9 @@ class AdminController extends Controller
     public function update(Request $request, string $ulid)
     {
         $validated = $request->validate([
-            'admin_name' => ['required'],
-            'admin_id' => ['required', 'alpha_num'],
+            'name' => ['required'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
+            'password_confirmation' => ['required'],
             'level' => ['required'],
             'status' => ['required'],
         ]);
@@ -79,8 +82,8 @@ class AdminController extends Controller
         $admin = Admin::where('ulid', $ulid)->first();
     
         $admin->update([
-            'name' => $validated['admin_name'],
-            'id' => $validated['admin_id'],
+            'name' => $validated['name'],
+            'password' => Hash::make($validated['password']),
             'level' => $validated['level'],
             'status' => $validated['status'],
         ]);

@@ -5,16 +5,16 @@
 
         <div class="block mb-5">
             <label class="block">이름</label>
-            <input type="text" name="admin_name" value="{{old('admin_name')}}" class="rounded border border-slate-200 w-full">
-            @error('admin_name')
+            <input type="text" name="name" value="{{old('name')}}" class="rounded border border-slate-200 w-full">
+            @error('name')
                 <p class="italic text-sm text-rose-500">{{$message}}</p>
             @enderror
         </div>
 
         <div class="block mb-5">
             <label class="block">아이디</label>
-            <input type="text" name="admin_id" value="{{old('admin_id')}}" class="rounded border border-slate-200 w-full">
-            @error('admin_id')
+            <input type="text" name="id" value="{{old('id')}}" class="rounded border border-slate-200 w-full">
+            @error('id')
                 <p class="italic text-sm text-rose-500">{{$message}}</p>
             @enderror
         </div>

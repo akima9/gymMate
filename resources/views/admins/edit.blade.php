@@ -6,16 +6,8 @@
 
         <div class="block mb-5">
             <label class="block">이름</label>
-            <input type="text" name="admin_name" value="{{$admin->name}}" class="rounded border border-slate-200 w-full">
+            <input type="text" name="name" value="{{$admin->name}}" class="rounded border border-slate-200 w-full">
             @error('admin_name')
-                <p class="italic text-sm text-rose-500">{{$message}}</p>
-            @enderror
-        </div>
-
-        <div class="block mb-5">
-            <label class="block">아이디</label>
-            <input type="text" name="admin_id" value="{{$admin->id}}" class="rounded border border-slate-200 w-full">
-            @error('admin_id')
                 <p class="italic text-sm text-rose-500">{{$message}}</p>
             @enderror
         </div>
