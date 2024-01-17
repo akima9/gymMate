@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\GymController;
 use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ Route::controller(AdminLoginController::class)->group(function () {
     Route::post('/login/admin', 'login')->name('login.admin');
 });
 
+Route::resource('gyms', GymController::class)->middleware(['auth:admin']);
 /*
 Verb	URI	Action	Route Name
 GET	/photos	index	photos.index
