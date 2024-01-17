@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\UserController;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -31,29 +32,11 @@ Route::controller(UserController::class)->group(function () {
 // Route::resource('admins', AdminController::class);
 Route::resource('admins', AdminController::class)->middleware(['auth:admin']);
 
-Route::get('/login/admin', function () {
-    return view('admins.login');
-})->name('admins.login');
-
-Route::get('/logout/admin', function () {
-    Auth::guard('admin')->logout();
-    return redirect()->route('admins.login');
-})->name('admins.logout');
-
-Route::post('/login/admin', function (Request $request) {
-    $validated = $request->validate([
-        'id' => ['required'],
-        'password' => ['required'],
-    ]);
-
-    $admin = Admin::where('id', $validated['id'])->first();
-    if ($admin->status === 'inactive') return back();
-
-    if (Auth::guard('admin')->attempt($validated)) {
-        $request->session()->regenerate();
-        return redirect()->intended(route('admins.index'));
-    }
-})->name('login.admin');
+Route::controller(AdminLoginController::class)->group(function () {
+    Route::get('/login/admin', 'index')->name('admins.login');
+    Route::get('/logout/admin', 'logout')->name('admins.logout')->middleware(['auth:admin']);
+    Route::post('/login/admin', 'login')->name('login.admin');
+});
 
 /*
 Verb	URI	Action	Route Name
