@@ -30,6 +30,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/create', 'create');
 });
 
+Route::resource('admins/gyms', GymController::class)->middleware(['auth:admin']);
+
 // Route::resource('admins', AdminController::class);
 Route::resource('admins', AdminController::class)->middleware(['auth:admin']);
 
@@ -38,8 +40,6 @@ Route::controller(AdminLoginController::class)->group(function () {
     Route::get('/logout/admin', 'logout')->name('admins.logout')->middleware(['auth:admin']);
     Route::post('/login/admin', 'login')->name('login.admin');
 });
-
-Route::resource('gyms', GymController::class)->middleware(['auth:admin']);
 /*
 Verb	URI	Action	Route Name
 GET	/photos	index	photos.index
